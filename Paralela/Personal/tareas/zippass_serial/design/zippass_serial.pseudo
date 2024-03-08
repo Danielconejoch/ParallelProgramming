@@ -1,0 +1,44 @@
+zip_array:
+
+  crear_array(zip_array )
+
+  zip_array_destroy()
+
+  agregar_zip_info(zip_info cajita)
+
+end zip_array
+
+zip_info:
+
+  procedure zip_info_init(string new_path, int passwordSize):
+    string contrasena := ""
+    string path := new_path
+  end procedure
+
+  procedure print_zip_info(zip_info zip_to_print):
+    print path + contrasena
+
+end zip_info
+
+procedure brute_force(zip_array zips, string diccionario, int cantidad_caracteres):
+  for (i := 0 to size(zips))
+    for (i := 0 to cantidad_caracteres)
+      
+end procedure
+    
+procedure main():
+  //Recibe del usuario o tests
+  string diccionario // letras utilizadas en las contrasenas
+  int cantidad_caracteres // cantidad de caracteres que contiene la contrasena
+  zip_array zip_infos := crear_array()  // arreglo dinamico de zip infos
+
+  //while para leer los path porque no sabemos cuantos son
+  while(there_is_line_to_read() = true)
+    agregar_zip_info(zip_infos, zip_info_init(leer_linea())) // append 
+
+  //for que llama al metodo brute_force y print_zip_info para descifrar la contrasena e imprimir la informacion del path
+  for (i := 0 to size(zip_array))
+    brute_force(zip_infos, diccionario, cantidad_caracteres)
+    print_zip_info(zip_infos)
+  end for
+end procedure

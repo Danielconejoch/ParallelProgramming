@@ -1,0 +1,53 @@
+function primeFact (primes, numTF)
+  vector factorizedNumber := empty
+  if primesSize > 0
+    B = primesSize
+    for index := 0; index < primesSize
+      B[index] := 0
+    index++
+
+    for index := 0; index < primesSize and numTF != 1
+      if numTF > 0
+        while numTF % primes[index] == 0
+          numTF := numTF/primes[index]
+          B[index]++
+        end while
+      end if
+    index++
+  
+    for (index := 0; i < primesSize)
+      if B[index] > 1
+        push_back(factorizedNumber(primes[index]))
+        push_back(factorizedNumber(B[index]))
+      end if
+    index++
+
+  else
+    push_back(factorizedNumber(-1))
+  end if
+
+  return factorizedNumber
+end function
+
+function primeFactAllNumbers(numbers)
+  declare greatestNumber := 0
+  for index := 0; index < numbersSize
+    if greatestNumber < numbers[index]
+      greatestNumber = numbers[index]
+    end if
+  index++
+
+  declare criba
+
+  vector primes := criba.SieveOfEratosthenes(greatestNumber)
+  vector vector allNUmbersFactorized
+  vector notFactorizable
+
+  for index := 0; index < numbersSize
+    notFactorizable := primeFact(primes, numbers[index])
+    push_back(allNUmbersFactorized(notFactorizable))
+  index++
+
+  return allNUmbersFactorized
+
+end function

@@ -1,0 +1,140 @@
+zip_array:
+
+  crear_array(zip_array )
+
+  zip_array_destroy()
+
+  agregar_zip_info(zip_info cajita)
+
+end zip_array
+
+zip_info:
+
+  procedure zip_info_init(string new_path, int passwordSize):
+    string contrasena := ""
+    string path := new_path
+  end procedure
+
+  procedure print_zip_info(zip_info zip_to_print):
+    print path + contrasena
+
+end zip_info
+
+procedure brute_force(data):
+  // Asignar memoria para los hilos
+  threads := calloc()
+  
+  // Recorrer la longitud de las contraseñas
+  for pass_length from 1 to shared_data.password_size do
+    max_permutation *= dictionary_length
+    
+    // Enviar a los hilos para generarlas
+    for thread_num from 0 to shared_data.thread_count do
+      // Calcular el inicio
+      private_data[thread_num].start := static_mapping()
+      
+      // Calcular el final
+      private_data[thread_num].end := static_mapping(t)
+
+      //Otros datos
+      private_data[thread_num].current_length := pass_length
+      private_data[thread_num].current_permutation := max_permutation
+
+      // Abrir zip una vez para cada hilo
+      private_data[thread_num].zip_archive := zip_open()
+      
+      // Crear hilos
+      pthread_create(generate_password, private_data[thread_num])
+    end for
+    
+    for thread_num from 0 to shared_data.thread_count do
+      pthread_join(threads[thread_num])
+    end for
+  end for
+  
+  free(threads)
+end procedure
+
+procedure generate_password(data):
+  
+  for attempts from private_data.start to private_data.end do
+    new_password := calloc(pass_length + 1, sizeof(char))
+    number := attempts
+    
+    // Construir la cadena new_password
+    for position from pass_length - 1 downto 0 do
+      new_password[position] := dictionary[number % dictionary_length]
+      number := number / dictionary_length
+    end for
+    
+    //Intentar contrasena
+    try_password(zip, new_password, private_data, zip_count)
+    free(new_password)
+    
+    // Condiciones de parada
+    pthread_mutex_lock(shared_data.can_open_zip)
+    if zip == 0 then
+      zip_close(zip.zip_archive)
+    end if
+    if shared_data.is_cracked[zip_count] then
+      pthread_mutex_unlock(shared_data.can_open_zip)
+      return PASSWORD_CRACKED
+    end if
+    pthread_mutex_unlock(shared_data.can_open_zip)
+  end for
+  
+  return PASSWORD_NOT_CRACKED
+end procedure
+
+
+
+procedure try_password(zip, password, private_data, zip_number):
+  // Contraseña encontrada
+  if text == text_inside_zip then
+    // Guardar la contraseña en la estructura zip
+    zip password = password
+    // Cerrar el archivo y liberar memoria
+    zip_close(private_data.zip_archive)
+    //Proteger mutex
+    pthread_mutex_lock(shared_data.can_open_zip)
+    //Ese zip ya tiene contrasena = true
+    shared_data.is_cracked[zip_number] := true
+    pthread_mutex_unlock(shared_data.can_open_zip)
+    zip_fclose(fd)
+    return PASSWORD_CRACKED
+  end if
+  free(txt)
+  free(file_info)
+  return PASSWORD_NOT_CRACKED
+end procedure
+
+
+
+procedure static_mapping(thread_num, max_permutation, thread_count):
+  division_result := max_permutation / thread_count
+  remainder := max_permutation % thread_count
+
+  if thread_num < remainder then
+    return thread_num * (division_result + 1)
+  else
+    return thread_num * division_result + remainder
+  end if
+end procedure
+
+    
+procedure main():
+  //Recibe del usuario o tests
+  string diccionario // letras utilizadas en las contrasenas
+  int cantidad_caracteres // cantidad de caracteres que contiene la contrasena
+  zip_array zip_infos := crear_array()  // arreglo dinamico de zip infos
+
+  //while para leer los path porque no sabemos cuantos son
+  while(there_is_line_to_read() = true)
+    agregar_zip_info(zip_infos, zip_info_init(leer_linea())) // append 
+
+  //for que llama al metodo brute_force y print_zip_info para descifrar la contrasena e imprimir la informacion del path
+  for (i := 0 to size(zip_array))
+    brute_force(zip_infos, diccionario, cantidad_caracteres)
+    print_zip_info(zip_infos)
+  end for
+end procedure

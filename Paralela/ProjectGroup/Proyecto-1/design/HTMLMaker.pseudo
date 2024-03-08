@@ -1,0 +1,33 @@
+procedure createHTML(vector data, vectornumbers, vector<vector> data_of_numbers)
+  if data[0].fact do
+    updateFactPage(data[0].httpResponse, numbers, data_of_numbers)
+  end
+  if !data[0].fact do
+    updateGoldPage(data[0].httpResponse, numbers, data_of_numbers)
+  end
+end
+  
+procedure consume(vector data)
+    vector<int> numbers
+    vector<vector> data_of_numbers
+  
+    for i := 0; i < data.size() do
+      numbers.push_back(data[i].num)
+      data_of_numbers.push_back(data[i].num_array)
+      ++i
+    end
+    createHTML(data, numbers, data_of_numbers)
+end
+  
+procedure updateFactPage(httpResponse, vector numbers, vector<vector> allFactors)
+  string title := "Prime factorization of"
+  show (allFactors)
+  httpResponse.body()
+end
+
+bool HTMLMaker::updateGoldPage(httpResponse, vector numbers, vector<vector> allSums)
+  string title := "Goldbach sums of"
+  show (allSums)
+  httpResponse.body()
+end
+  

@@ -1,0 +1,81 @@
+procedure begin(thread_num, work, thread_amount)
+  mod := work % thread_amount
+  min := (mod) > thread_num ? (work / thread_num) : mod
+  return thread_num * (work / thread_amount) + min
+end procedure
+
+procedure end(thread_num, work, thread_amount)
+  return begin(thread_num + 1, work, thread_amount)
+end procedure
+
+procedure heatIterations(data, vector<vector<double>>& heat_map)
+  define equilibrium_found := false
+  define k := 0
+  define vector<vector<double>> new_heat_map(heat_map.size(), vector<double>(heat_map[0].size(), 0.0))
+
+  for(i = 0 to heat_map.size())
+    for(j = 0 to heat_map[0].size())
+      new_heat_map[i][j] = heat_map[i][j]
+    end
+  end
+
+  declare thread_count = omp_get_max_threads()
+
+  if thread_count > heat_map.size() - 2
+    thread_count = heat_map.size() - 2
+  end if
+
+  if thread_count <= 2
+    call heatIterations_serial(data, heat_map)
+    return
+  end if
+
+  #pragma omp parallel num_threads(thread_count){
+    declare t_num := omp_get_thread_num()
+    declare t_count := thread_count
+    declare work := heat_map.size() - 2
+    declare begin := begin(t_num, work, t_count) + 1
+    declare end_ := end(t_num, work, t_count) + 1
+
+    #pragma omp critical(can_talk)
+    print("Thread " + t_num + " is working on rows " + begin + " to " + end_)
+    while not equilibrium_found
+      for(i = begin to end_)
+        for(j = 1 to heat_map[0].size() - 1)
+          heat = (new_heat_map[i - 1][j] + new_heat_map[i][j + 1] + new_heat_map[i + 1][j] + new_heat_map[i][j - 1] - (4 * new_heat_map[i][j])) * (data.time * data.thermal_diffusivity)/(data.dimensions * data.dimensions);
+          heat_map[i][j] += heat
+        end
+      end
+
+      #pragma omp barrier
+
+      for(i = begin to end_)
+        for(j = 1 to heat_map[0].size() - 1)
+          var = new_heat_map[i][j] - heat_map[i][j]
+          var = xd < 0 ? -var : var
+          if(var < sensitivity)
+            equilibrium_found = true
+          end
+        end
+      end
+
+      #pragma omp barrier
+
+      #pragma omp single
+      k++
+    end while
+  }
+  print("Iterations: " + k)
+  iterations := k
+
+  format_time(iterations*time)
+
+end procedure
+
+procedure format_time(seconds)
+  define text[48]
+  define gmt = * gmtime(seconds)
+  snprintf(text, sizeof text, "%04d/%02d/%02d\t%02d:%02d:%02d", gmt.tm_year
+    - 70, gmt.tm_mon, gmt.tm_mday - 1, gmt.tm_hour, gmt.tm_min, gmt.tm_sec);
+  return text;
+end procedure

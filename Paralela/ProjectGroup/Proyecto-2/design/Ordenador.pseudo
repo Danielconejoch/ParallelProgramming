@@ -1,0 +1,131 @@
+define fs := std::filesystem
+
+procedure getPlateDirectory(directory)
+  define lastSeparatorPos = directory.rfind('/')
+  return directory.substr(0, lastSeparatorPos + 1)
+end procedure
+
+procedure start(argc, argv)
+  if argc < 2
+    print error "Entrada de datos: " << argv[0] << "tests/<nombre del archivo>"
+    " (cantidad de hilos) <- (opcional) " <<
+    "(tests/<nombre carpeta salida de datos>/) <- (opcional)" << std::endl;
+    return EXIT_FAILURE;
+  end if
+
+  define job_txt = argv[1]
+  define archivo(job_txt)
+
+  if archivo is not open
+    print error "No se pudo abrir el archivo " << job_txt << std::endl;
+    return EXIT_FAILURE;
+  end if
+
+  define thread_count := (argc >= 3) ? std::atoi(argv[2]) : std::thread::hardware_concurrency();
+
+  define output_dir := "tests/report"
+  if argc >= 4
+    output_dir := argv[3]
+  end if
+
+  if not fs::exists(output_dir)
+    fs::create_directory(output_dir)
+  end if
+
+  define read_line
+  define vector<Data> datas
+  define counter := 0
+
+  define start := std::chrono::high_resolution_clock::now()
+  while(getline(archivo, read_line))
+    datas.resize(counter + 1)
+    readArguments(datas[counter], read_line, job_txt, thread_count)
+    datas.pushback(datas[counter])
+    counter += 1
+  end while
+  define end = std::chrono::high_resolution_clock::now()
+  define duration: := end - start
+  print "Tiempo de lectura: " << duration.count() << " segundos" << std::endl;
+
+  call writeReport(datas, job_txt, output_dir)
+  return EXIT_SUCCESS;
+end procedure
+
+procedure readArguments(data, simulation_info, directory, thread_count)
+  std::istringstream iss(simulation_info)
+  if iss >> data.bin_file
+    data.bin_path = getPlateDirectory(directory) + data.bin_file
+    is  >> data.time >> data.thermal_diffusivity >> data.dimensions >> data sensitivity
+    data.thread_count = thread_count
+    define ord := Ordenador()
+    ord.read_bin(data)
+  else if
+    print error "Error al procesar datos"
+  end if
+end procedure
+
+procedure read_bin(data)
+  std::ifstream file
+  define plate_size[2]
+  define plate_filename = data.bin_path
+  try
+    file.open(plate_filename, std::ios::binary | std::ios::out)
+
+    if not file.read(plate_size, sizeof(plate_size))
+      print error "Error al leer el archivo " << plate_filename << std::endl;
+    end if
+  
+  define height := plate_size[0]
+  define width := plate_size[1]
+  define plate[height][width]
+  if not file.read(plate, sizeof(plate))
+    print error "Error al leer el archivo " << plate_filename << std::endl;
+  end if
+  file.close()
+
+  vector<vector<double>> heat_map(height, vector<double>(width, 0.0))
+  for i in range(height)
+    for j in range(width)
+      heat_map[i][j] = plate[i][j]
+    end for
+  end for
+  heatIterations(data, heat_map)
+  catch(std::exception& e)
+    print error e.what() << std::endl;
+  end catch
+
+  return true
+end procedure
+
+void writeReport(data, file, directory)
+  define posBar = file.rfind('/')
+  define report_file
+  if posBar != std::string::npos
+    report_file = file.substr(posBar + 1)
+    define posPoint = report_file.rfind('.')
+    if posPoint != std::string::npos
+      report_file = report_file.substr(0, posPoint)
+    end if
+  end if 
+
+  define report_dir := directory + "/" + report_file
+  if not fs::exists(report_dir)
+    fs::create_directory(report_dir)
+  end if
+
+  report_file = report_dir + "/" + report_file + ".tsv"
+  print "Nombre del report: " << report_file << std::endl;
+  std::ofstream archivo(report_file)
+
+  if archivo.is_open() == true
+    for(i in range data.size())
+    archivo << data[i].bin_file << "\t" << data[i].time  << "\t"
+    << data[i].thermal_diffusivity << "\t" << data[i].dimensions 
+    << "\t" << data[i].sensitivity << "\t" << data[i].iterations 
+    << "\t" << data[i].format_time << std::endl;
+    end for
+  
+  archivo.close()
+  print "Datos guardados\n"
+  end if
+end procedure

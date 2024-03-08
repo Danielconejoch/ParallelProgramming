@@ -1,0 +1,33 @@
+procedure main():
+    // best shots
+    best_shot_1
+    best_shot_2
+
+    // sum of best shots
+    sum_1 = 0.0
+    sum_2 = 0.0
+
+    members = number of members
+
+    if members is even:
+        print "Error: athlete count must be odd"
+        return EXIT_FAILURE
+
+    for i = 0 to members:
+        create_thread(team1)
+        print "1.[i] best shot : " best shot 1
+        create_thread(team2)
+        print "1.2 best shot : " best shot 2
+    endFor
+
+    if sum_1 > sum_2:
+        print "Result 1:2, team 1 wins"
+    else:
+        print "Result 1:2, team 2 wins"
+end procedure
+
+procedure random_number(number):
+    calculates seed using number xor pthread id xor time
+    rand_r(seed)
+    return random_number
+end procedure

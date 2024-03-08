@@ -1,0 +1,4 @@
+operator ==(num_t num1, num_t num2) {
+    return num1.fact == num2.fact && num1.key == num2.key && num1.num
+    == num2.num;
+}

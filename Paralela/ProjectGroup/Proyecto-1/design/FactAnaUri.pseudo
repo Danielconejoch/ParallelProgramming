@@ -1,0 +1,58 @@
+procedure consume(client)
+    if(getMethod() = "GET" and getURI() = "/fact")
+        serveHomePage(client.httpRequest, client.httpResponse)
+    end if
+
+    if(client.httpRequest.getURI().rfind("/fact/fact", 0) = 0)
+        uriAnalizer(client.httpRequest, client.httpResponse)
+    end if
+end procedure
+
+procedure run()
+    consumeForever()
+    return EXIT_SUCCESS
+end procedure
+
+procedure serveHomePage(httpRequest, httpResponse)
+    (void)httpRequest
+    declare string "Prime Factorization"
+    body(Update page)
+    return httpResponse.send()
+end procedure
+
+procedure uriAnalizer(httpRequest, httpResponse)
+    httpResponse.setHeader(Update header)
+    declare std::smatch matches
+    declare std::regex inQuery(extract URI)
+    declare int vector factNumbers
+    declare string input := httpRequest.getURI()
+    declare size_t findEqual := input.find("=")
+    if(findEqual != string::npos)
+        input := input.substr(findEqual + 1)
+        declare size_t position = numbers.find("%2C")
+        while(position != string::npos)
+            numbers.replace(position, 3, ",")
+            position = numbers.find("%2C")
+        end while
+        
+        // Utilizar ',' como condicion en el getline() en std::getline
+        declare std::istringstream condition(numbers)
+        declare string numero
+        declare int* amount_of_numbers = new int
+        *amount_of_numbers := 0
+        while (std::getline(condition, numero, ','))
+            declare int num = std::stoi(numero)
+            *amount_of_numbers += 1
+            declare num_t num_prueba(&httpResponse, true, num, this->number_order,this->contador, amount_of_numbers)
+            produce(num_prueba)
+            this->number_order++
+        end while
+        this->contador++
+        this->number_order = 0
+    end if
+    else 
+        declare string "Invalid request"
+        body(Update page)
+    end else
+    return httpResponse.send()
+end procedure

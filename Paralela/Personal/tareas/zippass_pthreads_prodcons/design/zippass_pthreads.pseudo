@@ -1,0 +1,116 @@
+zip_array:
+
+  crear_array(zip_array )
+
+  zip_array_destroy()
+
+  agregar_zip_info(zip_info cajita)
+
+end zip_array
+
+zip_info:
+
+  procedure zip_info_init(string new_path, int passwordSize):
+    string contrasena := ""
+    string path := new_path
+  end procedure
+
+  procedure print_zip_info(zip_info zip_to_print):
+    print path + contrasena
+
+end zip_info
+
+simulation:
+  procedure simulation_init(simulation_t simulation, zip_array zips, 
+                            string dictionary, int password_size)
+    // shared data
+    shared_data = allocate memory for shared_data_t
+    shared_data.thread_count = how many threads
+    shared_data.zips = zips
+    shared_data.dictionary = dictionary
+    shared_data.password_size = password_size
+    shared_data.can_open_zip = allocate array of pthread_mutex_t
+    shared_data.is_cracked = allocate array of bool
+
+    // private data
+    private_data = allocate memory for private_data_t
+
+    // calls run
+    simulation_run
+    
+  end procedure
+
+  procedure simulation_run
+    create_producers_consumers(simulation)
+
+    for i from 0 to zips.count - 1:
+      print_zip_info(zips.elements[i])
+      zip_info_destroy(zips.elements[i])
+    end for
+  end procedure
+
+  procedure simulation_destroy
+    queue_destroy(shared_data.password_queue)
+    pthread_mutex_destroy(shared_data.can_open_zip)
+    free(password_queue)
+    free(private_data)
+    free(shared_data)
+    free(simulation)
+  end procedure
+
+  procedure create_producers_consumers(simulation)
+    shared_data = simulation.shared_data
+    shared_data.password_queue = create_queue()
+    // producer thread
+    create_thread(producer_thread, shared_data)
+
+    private_data = simulation.private_data
+    consumers = create_thread_array(consumer_count)
+
+    // consumer threads
+    for consumer_number = 0 to consumer_count - 1:
+        private_data[consumer_number].shared_data = shared_data
+        private_data[consumer_number].thread_number = consumer_number
+        create_thread(consumer_thread, private_data[consumer_number])
+
+    // Join producer thread
+    join_thread(producer_thread)
+
+    // Join consumer threads
+    for consumer_number = 0 to consumer_count - 1:
+      join_thread(consumer_threads[consumer_number])
+    end for
+    free(consumers)
+  end procedure
+
+
+end simulation
+procedure brute_force(string diccionario, int cantidad_caracteres):
+  for (i := 1 to passwordSize)
+    for (j:= 0 to maxPermutations)
+      string new_password
+    for (k:= i - 1, k > 0, k--)
+      generate_password = new password
+    end for
+    // metodo que abre zips con la new_password
+    Try_password(new_password)
+    end for
+  end for  
+end procedure
+    
+procedure main():
+  //Recibe del usuario o tests
+  string diccionario // letras utilizadas en las contrasenas
+  int cantidad_caracteres // cantidad de caracteres que contiene la contrasena
+  zip_array zip_infos := crear_array()  // arreglo dinamico de zip infos
+
+  //while para leer los path porque no sabemos cuantos son
+  while(there_is_line_to_read() = true)
+    agregar_zip_info(zip_infos, zip_info_init(leer_linea())) // append 
+
+  // inicia la ejecucion del programa
+  simulation_init()
+
+  // libera la memoria luego de ejecutar el programa
+  simulation_destroy()
+end procedure

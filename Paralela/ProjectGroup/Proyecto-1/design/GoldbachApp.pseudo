@@ -1,0 +1,62 @@
+procedure start()
+
+  key = "gold";
+
+  anaUri := new GoldAnaUri()
+  anaUri->createOwnQueue()
+
+  assembler := new AssemblerTest()
+  assembler->createOwnQueue()
+
+  htmlMaker := new HTMLMaker()
+
+  entranceQueue := anaUri->getConsumingQueue()
+
+  calculated_numbersQueue := assembler->getConsumingQueue()
+
+  assembled_calculationsQueue := new Queue()
+
+  assembler->setProducingQueue(assembled_calculationsQueue)
+
+  htmlMaker->setConsumingQueue(assembled_calculationsQueue)
+
+  thread_count := numero_de_cpus
+  solvers.resize(thread_count)
+
+  for i := 0; i < solvers.size() ++i do
+    solvers[i] := new Solver();
+    
+    if (i = 0) do
+      solvers[i]->createOwnQueue()
+    end 
+    else do
+      setConsumingQueue(solvers[0]->getConsumingQueue())
+    end
+    solvers[i]->setProducingQueue(assembler->getConsumingQueue());
+  end
+  
+  anaUri->setProducingQueue(this->solvers[0]->getConsumingQueue())
+
+  anaUri->startThread()
+  assembler->startThread();
+
+  for i := 0; i < solvers.size() do
+    solvers[i]->startThread();
+    ++i 
+  end
+
+  htmlMaker->startThread();
+end
+
+procedure stop()
+  anaUri->waitToFinish()
+  assembler->waitToFinish()
+
+  for i := 0; i < this->solvers.size() do
+    solvers[i]->waitToFinish()
+    ++i
+  end
+
+  htmlMaker->waitToFinish()
+
+end

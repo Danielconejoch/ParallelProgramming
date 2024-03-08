@@ -1,0 +1,63 @@
+function run(argc, argv)
+    bool stopApp
+    if call analizyArguments = true
+        get instance
+        start web apps
+        stopApp := true
+        listenForConnections(port)
+        NetworkAddress& address := getNetworkAddress()
+        append(info, "webserver", "Listening on" getIP())
+
+        clients:= queue<Socket>()
+        for i := 0; i < connectionHandler.size();
+            connectionHandler[i].setConsumingQueue(clients)
+            connectionHandler[i].applications := applicantions
+            conncetionHandler[i].startThread()
+        i++
+        acceptAllConnections()
+
+        for i := 0; i < conncetionHandler.size()
+            delete connectionHandler[i]
+        i++
+
+        delete clients
+    end if
+
+    if stopApp = true
+        stopApps()
+    end if
+
+    Log getInstance.stop()
+    return 0
+
+end function
+
+function startApps()
+    for index := 0; index < applications.size()
+        applicantions[index].start()
+    index++
+end function 
+
+function stopApps()
+    for index := 0; index < applications.size()
+        applications[index].stop()
+    index++
+end function
+
+function analizyArguments(argc, argv)
+    handlers := DEFAULT_HANDLERS
+    if argc >= 3
+        handlers := (int)argv[2]
+    end if
+
+    for i = 0; i < handlers
+        handler := new HttpConnectionHandler
+        connectionHandler.push_back(handler)
+    i++
+
+    return true
+end function 
+
+function handleClientConnection(client)
+    client.enqueue(client)
+end function

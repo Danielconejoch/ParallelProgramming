@@ -1,0 +1,18 @@
+procedure run
+    call consumeForever()
+
+    return exit_success
+end procedure
+
+procedure registerRedirect(key, toQueue)
+    toQueues[key] = toQueue
+end procedure
+
+procedure consume(data) override
+    key = call extractKey(data)
+    itr = toQueues.find(key)
+    if (itr == toQueues.end())
+        throw runtime_error("dispatcher: queues key not found")
+    end if
+    itr.second.enqueue(data)
+end procedure

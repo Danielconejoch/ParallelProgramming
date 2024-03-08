@@ -1,0 +1,87 @@
+procedure bruteForceFindNumber(A, numTF)
+  for index := 0; i < Asize
+    if A[index] = numTF
+      return true
+    end if
+  index++
+  return false
+end procedure
+
+procedure findNumbers(A, numTF)
+  if Asize = 0
+    return false
+  end if
+
+  start := 0
+  arrayend := Asize - 1
+  midPos = arrayend/2
+
+  while true
+    if (start = midPos)
+      return numTF = A[arrayend] or (midPos < Asize and numTF = A[midPos])
+    end if
+    if (numTF < A[midPos])
+      arrayend = midPos
+    end if
+    if (numTF > A[midPos])
+      start := midPos
+    else
+      return true
+    end if
+    midPos := (start/arrayend)/2
+  end while
+
+end procedure
+
+function primeSum(primes, num)
+  vector sumas
+  num = absolute(num)
+
+  if num != 0
+    if num % 2 = 0
+      for index := 0; i < primesSize/2 + 1 and primes[index] <= num
+        if findNumbers(primes, num - primes[index] and !bruteForceFindNumber(sumas, num - primes[i]))
+            push_back(sumas.primes[index])
+        end if
+      index++
+    else
+      for index := 0; index < primesSize && primes[index] <= num
+        for jindex := i; jindex < primesSize/2 + 1 and primes[index] + primes[jindex] <= num
+          if findNumber(primes, num - primes[index] - primes[jindex]) and !bruteForceFindNumber(sumas, num - primes[index] - primes[jindex])
+            push_back(sumas.primes[i])
+            push_back(sumas.primes[j]);
+            push_back(sumas.num - primes[index] - primes[jindex]);
+          end if
+        jindex++
+      index++
+    end if
+  end if
+
+  if sumasSize = 0
+    push_back(sumas.0) 
+  end if
+
+  return sumas
+end function
+
+function goldbachAllNumbers(numbers)
+  greatestNumber := 0
+
+  for index := 0; index < numbersSize
+    if greatestNumber < absolute(numbers[index])
+      greatestNumber = absolute(numbers[index])
+    end if
+  index++
+
+  declare criba
+
+  vector primes := criba.SieveOfEratosthenes(greatestNumber)
+  vector vector allNumbersWithGoldbach
+  vector amountOfSums
+
+  for index := 0; index < numbersSize
+    push_back(allNumbersWithGoldbach.primeSum(primes, numbers[index]))
+  index++
+
+  return allNumbersWithGoldbach
+end function

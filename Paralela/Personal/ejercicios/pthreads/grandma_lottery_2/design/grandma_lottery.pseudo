@@ -1,0 +1,13 @@
+procedure main
+    create_thread(random_number)
+    print "The number of the grandson 1 is: " number
+    create_thread(random_number)
+    print "The number of the grandson 2 is: " number
+end procedure
+
+procedure random_number(number)
+    calculates seed using number
+    rand_r(seed)
+    return random_number
+end procedure
+    

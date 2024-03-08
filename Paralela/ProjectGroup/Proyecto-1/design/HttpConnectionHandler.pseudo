@@ -1,0 +1,36 @@
+function consume(client)
+    while(true)
+        httpRequest(client)
+
+        if httpRequest.parse() = false
+            break
+        end if
+
+        httpResponse(client)
+
+        package(httpRequest, httpResponse)
+
+        if(httpRequest.getHpptVersion() = "HTTP/1.0")
+            break
+        end if
+
+        produce(package)
+
+    end while
+end function
+
+function run()
+    consumeForever()
+    return 0
+end function
+
+procedure serveNotFound(httpRequest, httpResponse)
+    setStatusCode(404)
+    setHeaders("Error messages")
+    declare string title := "Not found"
+    
+    body(Udpate to incorrect url)
+
+    return httpResponse.send()
+
+end procedure

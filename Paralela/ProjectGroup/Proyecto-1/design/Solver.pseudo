@@ -1,0 +1,22 @@
+procedure consume(data)
+    if (largest_num < num)
+        criba
+        largest_num = num
+        prime_numbers = SieveOfErathostenes(num)
+    end if
+
+    if (fact)
+        factor
+        num.array = primeFact(prime_numbers, num)
+    else
+        gold
+        num.array = goldbach(prime_numbers, num)
+    end if
+
+    call produce(data)
+end procedure
+
+procedure run()
+    call consumeForever()
+    return EXIT_SUCCESS
+end procedure

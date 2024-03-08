@@ -1,0 +1,34 @@
+procedure check_if_request_completed(key)
+    vector<num_t> numeros_de_usuario = numeros[key]
+    return numeros_de_usuario.size() == *(numeros_de_usuario[0].amount_of_numbers)
+end procedure
+
+procedure insert_data(data)
+    itr = numeros.find(data.key)
+    if itr == numeros.end()
+        vector<num_t> new_vec
+        numeros[data.key] = new_vec
+    end if
+
+    vector<num_t> numeros_de_usuario = numeros[data.key]
+
+    for i = 0 until i < numeros_de_usuario.size() do
+        if numeros_de_usuario[i].id > data.id
+            insert(numeros[data.key].begin() + i, data)
+            return
+    end
+
+    numeros[data.key].push_back(data)
+end procedure
+
+procedure consume(data)
+    insert_data(data)
+    if check_if_request_completed(data.key)
+        produce(numeros[data.key])
+    end if
+end procedure
+
+procedure run()
+    call consumeForever()
+    return EXIT_SUCCESS
+end procedure

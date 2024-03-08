@@ -1,0 +1,24 @@
+procedure main:
+	semaphore semA := semaphore(0)
+	semaphore semB := semaphore(0)
+
+  create_thread(thread_a)
+  create_thread(thread_b)
+  create_thread(thread_c)
+end procedure
+
+procedure thread_a:
+  statement a1
+	signal(semA)
+end procedure
+
+procedure thread_b:
+	wait(semA)
+  statement b1
+	signal(semB)
+end procedure
+
+procedure thread_c:
+	wait(semB)
+  statement c1
+end procedure

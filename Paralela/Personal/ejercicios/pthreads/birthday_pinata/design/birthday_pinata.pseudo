@@ -1,0 +1,20 @@
+procedure main()
+  shared remaining_hits := 0
+  shared can_access_position := create_mutex()
+  shared thread_count:= new thread_count;
+  for thread_number := 0 to thread_count do
+    create_thread(hit, thread_number)
+  end for
+end procedure
+
+procedure hit(thread_number)
+  lock(can_access_position)
+  thread.hit := thread.hit++
+  remaining_hits := remaining_hits--
+  if remaining_hits = 0 do
+    print "Thread ", thread_number, "/", thread_count ": " hits "hits, I broke the pinata"  
+  else
+  print "Thread ", thread_number, "/", thread_count ": " hits "hits"
+  end
+  unlock(can_access_position)
+end procedure
